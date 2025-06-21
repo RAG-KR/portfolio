@@ -62,23 +62,39 @@
   
   .wireframe {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
   }
   
   .wireframe:hover {
-    border-color: rgba(96, 165, 250, 0.6);
-    box-shadow: 0 0 20px rgba(96, 165, 250, 0.1);
+    border-color: rgba(96, 165, 250, 0.8);
+    box-shadow: 0 0 30px rgba(96, 165, 250, 0.2);
   }
   
   .glass {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+  }
+  
+  .glass:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.25);
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }
