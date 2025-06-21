@@ -1,181 +1,261 @@
+
 import { useEffect, useRef } from "react";
+import * as THREE from "three";
 
 export const GeometricBackground = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!mountRef.current) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+    mountRef.current.appendChild(renderer.domElement);
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
+    camera.position.z = 15;
 
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    // Simplified shapes data with less overwhelming properties
-    const shapes: Array<{
-      x: number;
-      y: number;
-      size: number;
-      rotation: number;
-      rotationSpeed: number;
-      type: "circle" | "triangle" | "square" | "hexagon" | "diamond";
-      opacity: number;
-      layer: number;
-      color: string;
-      initialX: number;
-      initialY: number;
-    }> = [];
-
-    // Moderately bright color palette (15% brighter than original muted)
-    const colors = [
-      "#7ab5ff", // brighter blue-400
-      "#b89bff", // brighter violet-400
-      "#4de6a6", // brighter emerald-400
-      "#ffcf47", // brighter amber-400
-      "#ff85c4", // brighter pink-400
-      "#1fc7e8", // brighter cyan-400
+    // Parallax groups for different layer speeds
+    const parallaxGroups = [
+      new THREE.Group(), // Foreground - fastest
+      new THREE.Group(), // Mid-ground
+      new THREE.Group(), // Background - slowest
     ];
 
-    // Create fewer, less distracting shapes
-    for (let i = 0; i < 30; i++) {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      shapes.push({
-        x: x,
-        y: y,
-        initialX: x,
-        initialY: y,
-        size: Math.random() * 60 + 20,
-        rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.02,
-        type: ["circle", "triangle", "square", "hexagon", "diamond"][Math.floor(Math.random() * 5)] as any,
-        opacity: Math.random() * 0.4 + 0.2, // More subtle opacity
-        layer: Math.floor(Math.random() * 3),
-        color: colors[Math.floor(Math.random() * colors.length)]
+    parallaxGroups.forEach(group => scene.add(group));
+
+    // Moderately bright wireframe materials (15% brighter than original muted)
+    const brightMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0x7ab5ff, // brighter blue-400
+      wireframe: true,
+      transparent: true,
+      opacity: 0.6
+    });
+
+    const accentMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0xb89bff, // brighter violet-400
+      wireframe: true,
+      transparent: true,
+      opacity: 0.5
+    });
+
+    const dustMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0x4de6a6, // brighter emerald-400
+      wireframe: true,
+      transparent: true,
+      opacity: 0.4
+    });
+
+    const highlightMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0xffcf47, // brighter amber-400
+      wireframe: true,
+      transparent: true,
+      opacity: 0.5
+    });
+
+    // Create geometric shapes
+    function createGeometry(type: string, size: number, material: THREE.Material) {
+      let geometry: THREE.BufferGeometry;
+      switch(type) {
+        case 'sphere':
+          geometry = new THREE.SphereGeometry(size, 16, 16);
+          break;
+        case 'box':
+          geometry = new THREE.BoxGeometry(size, size, size);
+          break;
+        case 'octahedron':
+          geometry = new THREE.OctahedronGeometry(size);
+          break;
+        case 'tetrahedron':
+          geometry = new THREE.TetrahedronGeometry(size);
+          break;
+        case 'torus':
+          geometry = new THREE.TorusGeometry(size, size * 0.3, 8, 16);
+          break;
+        case 'cone':
+          geometry = new THREE.ConeGeometry(size, size * 1.5, 8);
+          break;
+        default:
+          geometry = new THREE.SphereGeometry(size, 12, 12);
+      }
+      return new THREE.Mesh(geometry, material);
+    }
+
+    // Populate parallax layers
+    const shapes: Array<{
+      mesh: THREE.Mesh;
+      layer: number;
+      speed: number;
+      rotationSpeed: { x: number; y: number; z: number };
+      initialY: number;
+    }> = [];
+    
+    const shapeTypes = ['sphere', 'box', 'octahedron', 'tetrahedron', 'torus', 'cone'];
+    const materials = [brightMaterial, accentMaterial, highlightMaterial, dustMaterial];
+
+    // Layer 1 - Foreground (fastest parallax)
+    for(let i = 0; i < 15; i++) {
+      const type = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+      const material = materials[Math.floor(Math.random() * materials.length)];
+      const shape = createGeometry(type, Math.random() * 1.2 + 0.6, material);
+      
+      shape.position.set(
+        (Math.random() - 0.5) * 50,
+        (Math.random() - 0.5) * 35,
+        Math.random() * 10 + 5
+      );
+      
+      shape.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
+
+      parallaxGroups[0].add(shape);
+      shapes.push({ 
+        mesh: shape, 
+        layer: 0, 
+        speed: Math.random() * 0.6 + 0.9,
+        rotationSpeed: {
+          x: (Math.random() - 0.5) * 0.015,
+          y: (Math.random() - 0.5) * 0.015,
+          z: (Math.random() - 0.5) * 0.015
+        },
+        initialY: shape.position.y
       });
     }
 
+    // Layer 2 - Mid-ground
+    for(let i = 0; i < 20; i++) {
+      const type = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+      const material = materials[Math.floor(Math.random() * materials.length)];
+      const shape = createGeometry(type, Math.random() * 1.5 + 0.8, material);
+      
+      shape.position.set(
+        (Math.random() - 0.5) * 70,
+        (Math.random() - 0.5) * 45,
+        Math.random() * 15 - 5
+      );
+
+      parallaxGroups[1].add(shape);
+      shapes.push({ 
+        mesh: shape, 
+        layer: 1, 
+        speed: Math.random() * 0.4 + 0.5,
+        rotationSpeed: {
+          x: (Math.random() - 0.5) * 0.01,
+          y: (Math.random() - 0.5) * 0.01,
+          z: (Math.random() - 0.5) * 0.01
+        },
+        initialY: shape.position.y
+      });
+    }
+
+    // Layer 3 - Background (slowest parallax)
+    for(let i = 0; i < 25; i++) {
+      const type = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+      const shape = createGeometry(type, Math.random() * 2.0 + 0.5, dustMaterial);
+      
+      shape.position.set(
+        (Math.random() - 0.5) * 90,
+        (Math.random() - 0.5) * 60,
+        Math.random() * 20 - 20
+      );
+
+      parallaxGroups[2].add(shape);
+      shapes.push({ 
+        mesh: shape, 
+        layer: 2, 
+        speed: Math.random() * 0.25 + 0.15,
+        rotationSpeed: {
+          x: (Math.random() - 0.5) * 0.008,
+          y: (Math.random() - 0.5) * 0.008,
+          z: (Math.random() - 0.5) * 0.008
+        },
+        initialY: shape.position.y
+      });
+    }
+
+    // Mouse and scroll variables
+    let scrollY = 0;
     let mouseX = 0;
     let mouseY = 0;
-    let scrollY = 0;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = (e.clientX - canvas.width / 2) / canvas.width;
-      mouseY = (e.clientY - canvas.height / 2) / canvas.height;
+    const handleMouseMove = (event: MouseEvent) => {
+      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
     };
 
     const handleScroll = () => {
       scrollY = window.scrollY;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
 
-    const drawShape = (shape: typeof shapes[0]) => {
-      ctx.save();
-      
-      // Subtle glow effect
-      ctx.shadowColor = shape.color;
-      ctx.shadowBlur = 8;
-      
-      // Calculate parallax position based on mouse and scroll
-      const parallaxStrength = (shape.layer + 1) * 20;
-      const scrollParallax = scrollY * (shape.layer + 1) * 0.1;
-      
-      const finalX = shape.initialX + (mouseX * parallaxStrength) + Math.sin(Date.now() * 0.001 + shape.initialX * 0.01) * 10;
-      const finalY = shape.initialY + (mouseY * parallaxStrength) + scrollParallax + Math.cos(Date.now() * 0.001 + shape.initialY * 0.01) * 8;
-      
-      ctx.translate(finalX, finalY);
-      ctx.rotate(shape.rotation);
-      
-      ctx.strokeStyle = shape.color;
-      ctx.globalAlpha = shape.opacity;
-      ctx.lineWidth = 1.5;
-
-      const size = shape.size;
-
-      switch (shape.type) {
-        case "circle":
-          ctx.beginPath();
-          ctx.arc(0, 0, size / 2, 0, Math.PI * 2);
-          ctx.stroke();
-          break;
-        case "triangle":
-          ctx.beginPath();
-          ctx.moveTo(0, -size / 2);
-          ctx.lineTo(-size / 2, size / 2);
-          ctx.lineTo(size / 2, size / 2);
-          ctx.closePath();
-          ctx.stroke();
-          break;
-        case "square":
-          ctx.strokeRect(-size / 2, -size / 2, size, size);
-          break;
-        case "hexagon":
-          ctx.beginPath();
-          for (let i = 0; i < 6; i++) {
-            const angle = (i * Math.PI) / 3;
-            const x = (size / 2) * Math.cos(angle);
-            const y = (size / 2) * Math.sin(angle);
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.closePath();
-          ctx.stroke();
-          break;
-        case "diamond":
-          ctx.beginPath();
-          ctx.moveTo(0, -size / 2);
-          ctx.lineTo(size / 2, 0);
-          ctx.lineTo(0, size / 2);
-          ctx.lineTo(-size / 2, 0);
-          ctx.closePath();
-          ctx.stroke();
-          break;
-      }
-      ctx.restore();
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    window.addEventListener('resize', handleResize);
 
-      shapes.forEach((shape) => {
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Parallax movement based on scroll
+      const scrollFactor = scrollY * 0.001;
+      parallaxGroups[0].position.y = scrollFactor * 25; // Fastest
+      parallaxGroups[1].position.y = scrollFactor * 15; // Medium
+      parallaxGroups[2].position.y = scrollFactor * 8;  // Slowest
+
+      // Mouse parallax (subtle)
+      parallaxGroups[0].rotation.x = mouseY * 0.05;
+      parallaxGroups[0].rotation.y = mouseX * 0.05;
+      parallaxGroups[1].rotation.x = mouseY * 0.03;
+      parallaxGroups[1].rotation.y = mouseX * 0.03;
+      parallaxGroups[2].rotation.x = mouseY * 0.02;
+      parallaxGroups[2].rotation.y = mouseX * 0.02;
+
+      // Individual shape animations
+      shapes.forEach((shapeData) => {
+        const { mesh, rotationSpeed } = shapeData;
+        
         // Gentle rotation
-        shape.rotation += shape.rotationSpeed;
-
-        // Keep shapes within reasonable bounds
-        if (shape.initialX < -100) shape.initialX = canvas.width + 100;
-        if (shape.initialX > canvas.width + 100) shape.initialX = -100;
-        if (shape.initialY < -100) shape.initialY = canvas.height + 100;
-        if (shape.initialY > canvas.height + 100) shape.initialY = -100;
-
-        drawShape(shape);
+        mesh.rotation.x += rotationSpeed.x;
+        mesh.rotation.y += rotationSpeed.y;
+        mesh.rotation.z += rotationSpeed.z;
+        
+        // Subtle floating motion
+        mesh.position.y += Math.sin(Date.now() * 0.001 + mesh.position.x) * 0.01;
       });
 
-      requestAnimationFrame(animate);
-    };
+      renderer.render(scene, camera);
+    }
 
     animate();
 
+    // Cleanup
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
     };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
+    <div
+      ref={mountRef}
       className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"
-      style={{ background: "transparent" }}
     />
   );
 };
