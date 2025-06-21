@@ -44,7 +44,7 @@ export const Hero = () => {
     // Subtle mouse tracking for gentle parallax text effect
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 10, // Reduced from 20
+        x: (e.clientX / window.innerWidth - 0.5) * 10,
         y: (e.clientY / window.innerHeight - 0.5) * 10
       });
     };
@@ -67,23 +67,23 @@ export const Hero = () => {
           ref={titleRef}
           className="text-7xl md:text-9xl font-bold leading-tight mb-12 tracking-tight"
           style={{
-            transform: `translate(${mousePosition.x * 0.3}px, ${mousePosition.y * 0.3}px)` // Reduced movement
+            transform: `translate(${mousePosition.x * 0.3}px, ${mousePosition.y * 0.3}px)`
           }}
         >
-          Geometric<br />
+          Hi, I'm<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-            Portfolio
+            Raghav
           </span>
         </h1>
         <p 
           ref={subtitleRef}
           className="text-2xl md:text-3xl leading-relaxed max-w-4xl mx-auto text-zinc-300 font-medium"
           style={{
-            transform: `translate(${mousePosition.x * 0.2}px, ${mousePosition.y * 0.2}px)` // Reduced movement
+            transform: `translate(${mousePosition.x * 0.2}px, ${mousePosition.y * 0.2}px)`
           }}
         >
-          Crafting digital experiences through geometric precision and creative innovation, 
-          where design meets mathematical beauty in perfect harmony.
+          A passionate software developer crafting digital experiences through clean code and innovative solutions,
+          where functionality meets elegant design.
         </p>
         <div 
           ref={buttonsRef}
@@ -99,7 +99,7 @@ export const Hero = () => {
             onClick={() => scrollToSection("contact")}
             className="group glass px-8 py-4 rounded-lg text-lg font-medium transition-all duration-500 hover:scale-105 relative overflow-hidden"
           >
-            <span className="relative z-10">Contact Me</span>
+            <span className="relative z-10">Get In Touch</span>
           </button>
         </div>
       </div>
