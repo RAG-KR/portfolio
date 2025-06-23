@@ -1,8 +1,9 @@
-
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Navigation = () => {
   const [activeSection, setActiveSection] = useState("hero");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,10 +29,13 @@ export const Navigation = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    navigate(`/#${sectionId}`);
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   };
 
   return (

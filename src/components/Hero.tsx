@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { InitialLoadingAnimation } from "./InitialLoadingAnimation";
@@ -100,7 +99,7 @@ export const Hero = () => {
           >
             Hi, I'm<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-              Raghav
+              Raghav KR
             </span>
           </h1>
           <p 

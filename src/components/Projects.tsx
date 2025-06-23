@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,34 +7,74 @@ export const Projects = () => {
 
   const projects = [
     {
-      id: "fullstack-ecommerce",
-      title: "E-Commerce Platform",
-      description: "Full-stack e-commerce platform with React, Node.js, and real-time features",
-      tech: ["React", "Node.js", "MongoDB", "Socket.io"],
-      status: "Live",
+      id: "hive-mind",
+      title: "HiveMind",
+      description: "An AI-powered SaaS tool that turns any learning prompt into a clear, structured, and editable mind map.",
+      tech: ["React", "AI/ML", "SaaS", "Next.js"],
+      status: "Completed",
+      color: "purple",
+      videoUrl: "https://www.youtube.com/watch?v=t1Y83P7CYzo",
+      demoUrl: "#"
+    },
+    {
+      id: "ai-web-scraper",
+      title: "AI-Powered Web Scraper",
+      description: "An intelligent web scraper using Solana, Streamlit, and Ollama to run LLM inference directly on-machine.",
+      tech: ["Solana", "Streamlit", "Ollama", "Python"],
+      status: "Completed",
       color: "blue",
       videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      demoUrl: "https://ecommerce-demo.raghav.dev"
+      demoUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7236412218987134976/"
+    },
+    {
+      id: "flappy-bird-ai",
+      title: "AI Learns to Play Flappy Bird",
+      description: "An AI that learns to play Flappy Bird through generations of mutation and selection using the NEAT algorithm.",
+      tech: ["Python", "Pygame", "NEAT-Python", "AI/ML"],
+      status: "Completed",
+      color: "green",
+      videoUrl: "https://www.youtube.com/shorts/JzY4yAuCLLg?feature=share",
+      demoUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7340743794641838082/"
+    },
+    {
+      id: "freetube",
+      title: "FreeTube",
+      description: "A YouTube clone featuring video streaming and a familiar UI, built with React and Material-UI.",
+      tech: ["React", "Material-UI", "YouTube API"],
+      status: "Completed",
+      color: "red",
+      videoUrl: "https://youtu.be/WyaR0VD2Sss",
+      demoUrl: "https://fretube.netlify.app/"
+    },
+    {
+      id: "live-docs",
+      title: "LiveDocs",
+      description: "A real-time collaborative document editor for teams, inspired by Google Docs.",
+      tech: ["React", "WebSockets", "Node.js", "MongoDB"],
+      status: "Development",
+      color: "orange",
+      videoUrl: "#",
+      demoUrl: "#"
+    },
+    {
+      id: "bolt-clone",
+      title: "Bolt.new Clone",
+      description: "An intuitive, component-based website builder for creating stunning landing pages with no code.",
+      tech: ["React", "Drag-and-Drop", "Next.js", "Firebase"],
+      status: "Development",
+      color: "yellow",
+      videoUrl: "#",
+      demoUrl: "#"
     },
     {
       id: "ai-chat-app",
       title: "AI Chat Application",
-      description: "Real-time chat application with AI integration and modern UI/UX",
+      description: "Real-time chat application with AI integration and modern UI/UX.",
       tech: ["Next.js", "OpenAI API", "Prisma", "TailwindCSS"],
       status: "Development",
-      color: "purple",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      demoUrl: "https://ai-chat.raghav.dev"
-    },
-    {
-      id: "task-management",
-      title: "Task Management System",
-      description: "Collaborative task management with real-time updates and analytics",
-      tech: ["React", "Express", "PostgreSQL", "Redis"],
-      status: "Live",
       color: "emerald",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      demoUrl: "https://tasks.raghav.dev"
+      videoUrl: "#",
+      demoUrl: "#"
     }
   ];
 
@@ -43,7 +82,11 @@ export const Projects = () => {
     const colors = {
       blue: isHovered ? "border-blue-400 shadow-blue-400/30" : "border-blue-400/30",
       purple: isHovered ? "border-purple-400 shadow-purple-400/30" : "border-purple-400/30",
-      emerald: isHovered ? "border-emerald-400 shadow-emerald-400/30" : "border-emerald-400/30"
+      emerald: isHovered ? "border-emerald-400 shadow-emerald-400/30" : "border-emerald-400/30",
+      green: isHovered ? "border-green-400 shadow-green-400/30" : "border-green-400/30",
+      red: isHovered ? "border-red-400 shadow-red-400/30" : "border-red-400/30",
+      orange: isHovered ? "border-orange-400 shadow-orange-400/30" : "border-orange-400/30",
+      yellow: isHovered ? "border-yellow-400 shadow-yellow-400/30" : "border-yellow-400/30"
     };
     return colors[color as keyof typeof colors] || colors.blue;
   };
@@ -86,6 +129,10 @@ export const Projects = () => {
                 bg-gradient-to-br ${
                   project.color === 'blue' ? 'from-blue-500 to-cyan-500' :
                   project.color === 'purple' ? 'from-purple-500 to-pink-500' :
+                  project.color === 'green' ? 'from-green-500 to-teal-500' :
+                  project.color === 'red' ? 'from-red-500 to-rose-500' :
+                  project.color === 'orange' ? 'from-orange-500 to-amber-500' :
+                  project.color === 'yellow' ? 'from-yellow-500 to-lime-500' :
                   'from-emerald-500 to-green-500'
                 }
               `}></div>
@@ -114,6 +161,10 @@ export const Projects = () => {
                     ${
                       project.color === 'blue' ? 'bg-gradient-to-br from-blue-400 to-cyan-400' :
                       project.color === 'purple' ? 'bg-gradient-to-br from-purple-400 to-pink-400' :
+                      project.color === 'green' ? 'bg-gradient-to-br from-green-400 to-teal-400' :
+                      project.color === 'red' ? 'bg-gradient-to-br from-red-400 to-rose-400' :
+                      project.color === 'orange' ? 'bg-gradient-to-br from-orange-400 to-amber-400' :
+                      project.color === 'yellow' ? 'bg-gradient-to-br from-yellow-400 to-lime-400' :
                       'bg-gradient-to-br from-emerald-400 to-green-400'
                     }
                     ${hoveredProject === index ? 'animate-pulse-glow scale-125' : 'opacity-60'}
@@ -182,6 +233,10 @@ export const Projects = () => {
                         ${
                           project.color === 'blue' ? 'bg-blue-400' :
                           project.color === 'purple' ? 'bg-purple-400' :
+                          project.color === 'green' ? 'bg-green-400' :
+                          project.color === 'red' ? 'bg-red-400' :
+                          project.color === 'orange' ? 'bg-orange-400' :
+                          project.color === 'yellow' ? 'bg-yellow-400' :
                           'bg-emerald-400'
                         }
                       `}

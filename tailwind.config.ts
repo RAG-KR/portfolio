@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -100,20 +99,37 @@ export default {
 					}
 				},
 				'float': {
-					'0%, 100%': { transform: 'translateY(0px)' },
+					'0%, 100%': { transform: 'translateY(0)' },
 					'50%': { transform: 'translateY(-10px)' }
 				},
 				'pulse-glow': {
-					'0%, 100%': { opacity: '0.5' },
-					'50%': { opacity: '1' }
-				}
+					'0%, 100%': {
+						boxShadow: '0 0 15px 0px rgba(var(--glow-color), 0.6)',
+						transform: 'scale(1)',
+					},
+					'50%': {
+						boxShadow: '0 0 30px 5px rgba(var(--glow-color), 0.9)',
+						transform: 'scale(1.05)',
+					},
+				},
+				'icon-glow': {
+					'0%, 100%': {
+						transform: 'scale(1)',
+						filter: 'drop-shadow(0 0 3px currentColor)',
+					},
+					'50%': {
+						transform: 'scale(1.1)',
+						filter: 'drop-shadow(0 0 8px currentColor)',
+					},
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.8s ease-out',
-				'float': 'float 6s ease-in-out infinite',
-				'pulse-glow': 'pulse-glow 2s ease-in-out infinite'
+				'float': 'float 4s infinite ease-in-out',
+				'pulse-glow': 'pulse-glow 2s infinite ease-in-out',
+				'icon-glow': 'icon-glow 1.5s infinite ease-in-out',
 			}
 		}
 	},
