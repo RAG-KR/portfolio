@@ -31,10 +31,10 @@ export const Navigation = () => {
   const scrollToSection = (sectionId: string) => {
     navigate(`/#${sectionId}`);
     setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
     }, 100);
   };
 

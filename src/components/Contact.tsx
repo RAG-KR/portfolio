@@ -44,7 +44,7 @@ export const Contact = () => {
           <a href="https://www.youtube.com/channel/UCcn8TZeezm3RwNjrwx9Msxw" target="_blank" rel="noopener noreferrer" className="glass p-6 rounded-xl hover:border-red-400/50 transition-all duration-300 group hover:scale-105 hover:shadow-2xl hover:shadow-red-400/10">
             <div className="w-12 h-12 wireframe rounded-lg mx-auto mb-4 flex items-center justify-center">
               <Youtube className="w-6 h-6 text-red-400 group-hover:animate-icon-glow" />
-            </div>
+          </div>
             <h3 className="text-lg font-semibold mb-2">YouTube</h3>
             <p className="text-zinc-400 group-hover:text-white transition-colors text-sm">@raghav-kr</p>
           </a>
@@ -55,9 +55,9 @@ export const Contact = () => {
             "The best code is not just functional, but tells a story of problem-solving and creativity."
           </p>
           <a href="https://mail.google.com/mail/?view=cm&fs=1&to=krraghavlm10@gmail.com" target="_blank" rel="noopener noreferrer">
-            <button className="wireframe px-12 py-4 rounded-lg text-lg font-medium hover:scale-105 transition-all duration-300">
-              Start a Conversation
-            </button>
+          <button className="wireframe px-12 py-4 rounded-lg text-lg font-medium hover:scale-105 transition-all duration-300">
+            Start a Conversation
+          </button>
           </a>
         </div>
       </div>
